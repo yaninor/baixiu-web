@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <script>
+        //判断用户是否登录
+         var xhr = new XMLHttpRequest();
+         //发起一个同步请求
+         xhr.open('get','api/checkLogin.php',false);
+         xhr.onreadystatechange = function (){
+           if(xhr.readyState==4&&xhr.status==200){
+             //把返回值转成JS数据
+             var obj = JSON.parse(xhr.responseText);
+              //判断返回值没有登录就跳转到登录页面
+             if(obj.msg=='fail'){
+               location = "login.html";
+             }
+           }
+         }
+         xhr.send();
+      </script>
+  <meta charset="utf-8">
+  <title>Slides &laquo; Admin</title>
+  <link rel="stylesheet" href="../assets/vendors/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/vendors/font-awesome/css/font-awesome.css">
+  <link rel="stylesheet" href="../assets/vendors/nprogress/nprogress.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+  <script src="../assets/vendors/nprogress/nprogress.js"></script>
+</head>
+<body>
+  <script>NProgress.start()</script>
+
+  <div class="main">
+    <nav class="navbar">
+      <button class="btn btn-default navbar-btn fa fa-bars"></button>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="profile.html"><i class="fa fa-user"></i>个人中心</a></li>
+        <li><a href="api/doLogout.php"><i class="fa fa-sign-out"></i>退出</a></li>
+      </ul>
+    </nav>
+    <div class="container-fluid">
+      <div class="page-title">
+        <h1>图片轮播</h1>
+      </div>
+      <!-- 有错误信息时展示 -->
+      <!-- <div class="alert alert-danger">
+        <strong>错误！</strong>发生XXX错误
+      </div> -->
+      <div class="row">
+        <div class="col-md-4">
+          <form>
+            <h2>添加新轮播内容</h2>
+            <div class="form-group">
+              <label for="image">图片</label>
+              <!-- show when image chose -->
+              <img class="help-block thumbnail" style="display: none">
+              <input id="image" class="form-control" name="image" type="file">
+            </div>
+            <div class="form-group">
+              <label for="text">文本</label>
+              <input id="text" class="form-control" name="text" type="text" placeholder="文本">
+            </div>
+            <div class="form-group">
+              <label for="link">链接</label>
+              <input id="link" class="form-control" name="link" type="text" placeholder="链接">
+            </div>
+            <div class="form-group">
+              <button id="addSliders" class="btn btn-primary" type="submit">添加</button>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-8">
+          <div class="page-action">
+            <!-- show when multiple checked -->
+            <a class="btn btn-danger btn-sm" href="javascript:doBatch();" style="display: none">批量删除</a>
+          </div>
+          <table class="table table-striped table-bordered table-hover">
+            <thead>
+              <tr>
+                <th class="text-center" width="40"><input type="checkbox"></th>
+                <th class="text-center">图片</th>
+                <th>文本</th>
+                <th>链接</th>
+                <th class="text-center" width="100">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="text-center"><input type="checkbox"></td>
+                <td class="text-center"><img class="slide" src="../uploads/slide_1.jpg"></td>
+                <td>XIU功能演示</td>
+                <td>#</td>
+                <td class="text-center">
+                  <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+                </td>
+              </tr>
+              <tr>
+                <td class="text-center"><input type="checkbox"></td>
+                <td class="text-center"><img class="slide" src="../uploads/slide_2.jpg"></td>
+                <td>XIU功能演示</td>
+                <td>#</td>
+                <td class="text-center">
+                  <a href="javascript:;" class="btn btn-danger btn-xs">删除</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="aside">
+    <div class="profile">
+      <img class="avatar" src="../uploads/avatar.jpg">
+      <h3 class="name">布头儿</h3>
+    </div>
+    <ul class="nav">
+      <li>
+        <a href="index.html"><i class="fa fa-dashboard"></i>仪表盘</a>
+      </li>
+      <li>
+        <a href="#menu-posts" class="collapsed" data-toggle="collapse">
+          <i class="fa fa-thumb-tack"></i>文章<i class="fa fa-angle-right"></i>
+        </a>
+        <ul id="menu-posts" class="collapse">
+          <li><a href="posts.html">所有文章</a></li>
+          <li><a href="post-add.html">写文章</a></li>
+          <li><a href="categories.html">分类目录</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="comments.html"><i class="fa fa-comments"></i>评论</a>
+      </li>
+      <li>
+        <a href="users.html"><i class="fa fa-users"></i>用户</a>
+      </li>
+      <li class="active">
+        <a href="#menu-settings" data-toggle="collapse">
+          <i class="fa fa-cogs"></i>设置<i class="fa fa-angle-right"></i>
+        </a>
+        <ul id="menu-settings" class="collapse in">
+          <li><a href="nav-menus.html">导航菜单</a></li>
+          <li class="active"><a href="slides.html">图片轮播</a></li>
+          <li><a href="settings.html">网站设置</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <script src="../assets/vendors/jquery/jquery.js"></script>
+  <script src="../assets/vendors/bootstrap/js/bootstrap.js"></script>
+  <script>NProgress.done()</script>
+  <script src="../assets/vendors/template-web.js"></script>
+  <script type="text/html" id="tpl">
+    {{each list value}}
+    <tr>
+      <td class="text-center"><input type="checkbox" value="{{value.Id}}"></td>
+      <td class="text-center"><img class="slide" src="{{value.image}}"></td>
+      <td>{{value.text}}</td>
+      <td>{{value.link}}</td>
+      <td class="text-center">
+        <a href="javascript:deleteSliders({{value.Id}})" class="btn btn-danger btn-xs">删除</a>
+      </td>
+    </tr>
+    {{/each}}
+  </script>
+  <script> 
+  function loadSlideras(){
+    $.get({
+      url:'api/getSliders.php',
+      dataType:'json',
+      success:function (obj){
+        var html = template('tpl',{list:obj});
+        $('tbody').html(html);
+      }
+    });
+  }
+  loadSlideras();
+    $('#image').change(function(){
+      $('img.help-block').attr('src',URL.createObjectURL(this.files[0])).show();
+    });   
+    $('#addSliders').click(function(e){
+      e.preventDefault();
+      var fm = new FormData($('form')[0]);
+      $.post({
+        url:'api/addSliders.php',
+        data:fm,
+        contentType:false,
+        processData:false,
+        dataType:'json',
+        success:function(obj){   
+          if(obj.msg == "ok"){
+            location.reload();
+          }else {
+            alert('添加失败!');
+          }
+        }
+      })     
+    })
+    $('thead :checkbox').on('click',function(){
+      $('tbody :checkbox').prop('checked',this.checked);
+      if(this.checked)
+      $('.page-action>.btn-danger').fadeIn();
+      else 
+      $('.page-action>.btn-danger').fadeOut();
+    });
+    $('tbody').on('click',':checkbox',function(){
+        $('thead :checkbox').prop('checked',$('tbody :checkbox').length == $('tbody :checked').length);
+      if($('tbody :checked').length>0)
+      $('.page-action>.btn-danger').fadeIn();
+      else
+      $('.page-action:>.btn-danger').fadeOut();
+    });
+
+    function deleteSliders (id){
+      $.post({
+        url:'api/deleteSliders.php',
+        data:{
+          'ids':id
+        },
+        dataType:'json',
+        success:function(obj){
+          if(obj.msg=="ok"){
+            loadSlideras();
+          }else {
+            alert('删除失败');
+          }
+        }
+      })
+    };
+    function doBatch(){
+      var str="";
+      $('tbody :checked').each(function(index,ele){
+        str += ele.value+',';
+      });
+      str = str.substr(0,str.length-1);
+      $.post({
+        url:'api/deleteSliders.php',
+        data:{
+          'ids':str
+        },
+        dataType:'json',
+        success:function(obj){
+          if(obj.msg=="ok"){
+            loadSlideras();
+          }else {
+            alert('删除失败');
+          }
+        }
+      })
+    }
+  </script>
+</body>
+</html>
